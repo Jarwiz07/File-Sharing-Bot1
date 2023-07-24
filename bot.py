@@ -12,6 +12,35 @@ from datetime import datetime
 from config import API_HASH, APP_ID, LOGGER, TG_BOT_TOKEN, TG_BOT_WORKERS, FORCE_SUB_CHANNEL, CHANNEL_ID, PORT
 
 class Bot(Client):
+
+
+    # Add a new command handler for "/start" command
+@Client.on_message(filters.command("start"))
+async def start_command_handler(self, message):
+    if message.chat.type == types.ChatType.PRIVATE:
+        user = message.from_user
+        # You can access the first name using user.first_name
+        first_name = user.first_name
+        start_message = START_MESSAGE.format(first=first_name)
+
+        # Create an inline keyboard with buttons to join the channels
+        if FORCE_SUB_CHANNEL:
+            channel_links = [f"https://t.me/c/{link.strip()}/{CHANNEL_ID}" for link in FORCE_SUB_CHANNEL]
+        else:
+            channel_links = [f"https://t.me/your_channel_username"]
+
+        buttons = [types.InlineKeyboardButton("Join Channel", url=link) for link in channel_links]
+        keyboard = types.InlineKeyboardMarkup([buttons])
+
+        # Send the start message with the join buttons to the user
+        await message.reply_text(start_message, reply_markup=keyboard)
+    else:
+        # Handle the case when the "/start" command is used in a group or channel
+        # (Optional: You can add a custom response for group/channel usage)
+        await message.reply_text("This bot can only be used in private chats. Please send /start in a private chat.")
+
+    
+    
     def __init__(self):
         super().__init__(
             name="Bot",
