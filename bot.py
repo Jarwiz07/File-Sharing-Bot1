@@ -22,7 +22,7 @@ class Bot(Client):
                 invite_link = FORCE_SUB_CHANNEL[0]
             else:
                 # Use a default invite link if FORCE_SUB_CHANNEL is not set or empty
-                invite_link = "https://t.me/+9lxu20ySKGdkNTY1"
+                invite_link = "https://t.me/moviesformongo"
 
             # Create the button with the dynamic invite link
             buttons = [types.InlineKeyboardButton("Join Channel", url=invite_link)]
