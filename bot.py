@@ -9,8 +9,9 @@ from datetime import datetime
 from config import API_HASH, APP_ID, LOGGER, TG_BOT_TOKEN, TG_BOT_WORKERS, FORCE_SUB_CHANNEL, CHANNEL_ID, PORT
 
 class Bot(Client):
-
-   @Client.on_message(filters.command("start"))
+    
+    # Decorator should not be indented to the same level as async function
+    @Client.on_message(filters.command("start"))
     async def start_command_handler(self, message):
         if message.chat.type == types.ChatType.PRIVATE:
             user = message.from_user
