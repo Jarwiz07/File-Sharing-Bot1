@@ -11,26 +11,28 @@ from config import API_HASH, APP_ID, LOGGER, TG_BOT_TOKEN, TG_BOT_WORKERS, FORCE
 class Bot(Client):
 
     @Client.on_message(filters.command("start"))
-    async def start_command_handler(self, message):
-        if message.chat.type == types.ChatType.PRIVATE:
-            user = message.from_user
-            first_name = user.first_name
-            start_message = START_MESSAGE.format(first=first_name)
+   async def start_command_handler(self, message):
+    if message.chat.type == types.ChatType.PRIVATE:
+        user = message.from_user
+        first_name = user.first_name
+        start_message = START_MESSAGE.format(first=first_name)
 
-            if FORCE_SUB_CHANNEL:
-                # Use the first link from the list if multiple links are provided
-                invite_link = FORCE_SUB_CHANNEL[0]
-            else:
-                # Use a default invite link if FORCE_SUB_CHANNEL is not set or empty
-                invite_link = "https://t.me/moviesformongo"
-
-            # Create the button with the dynamic invite link
-            buttons = [types.InlineKeyboardButton("Join Channel", url=invite_link)]
-            keyboard = types.InlineKeyboardMarkup([buttons])
-
-            await message.reply_text(start_message, reply_markup=keyboard)
+        if FORCE_SUB_CHANNEL:
+            # Use the first link from the list if multiple links are provided
+            invite_link = FORCE_SUB_CHANNEL[0]
         else:
-            await message.reply_text("This bot can only be used in private chats. Please send /start in a private chat.")
+            # Use a default invite link if FORCE_SUB_CHANNEL is not set or empty
+            default_invite_link = "https://t.me/your_channel_username"
+            invite_link = default_invite_link
+
+        # Create the button with the dynamic invite link
+        buttons = [types.InlineKeyboardButton("Join Channel", url=invite_link)]
+        keyboard = types.InlineKeyboardMarkup([buttons])
+
+        await message.reply_text(start_message, reply_markup=keyboard)
+    else:
+        await message.reply_text("This bot can only be used in private chats. Please send /start in a private chat.")
+
 
     def __init__(self):
         super().__init__(
